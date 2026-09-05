@@ -3,158 +3,113 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- 页面描述：显示在搜索引擎结果里，JS 启动后会自动用 config 里的内容更新它 -->
-  <meta name="description" content="苦瓜大王的个人主页 —— 信息安全专业在校大学生，热爱用 AI Agent 解决实际问题。">
-  <title>苦瓜大王 · 个人主页</title>
+  <meta name="theme-color" content="#0e1a26">
+  <meta name="description" content="苦瓜大王的数字宇宙入口 —— 信息安全 × AI Agent × 3D 交互">
+  <title>苦瓜大王 · 于喧嚣宇宙中寻回澄澈</title>
 
-  <!-- 网站图标：内嵌 SVG，不需要额外图片文件，想换颜色改 fill 里的 %23FF005E -->
+  <!-- 网站图标（与自我介绍页同款，保持品牌一致） -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23FF005E'/><text x='50' y='70' font-size='54' text-anchor='middle' fill='%23fff' font-family='sans-serif'>苦</text></svg>">
-  <!-- 浏览器地址栏主题色 -->
-  <meta name="theme-color" content="#FF005E">
-  <!-- 展示字体（与 Inner Circle 同款）：Michroma 点缀标题、Manrope 英文正文 -->
-  <!-- media="print" + onload 技巧：字体加载失败也不会阻塞页面渲染 -->
+
+  <!-- 衬线字体：Instrument Serif（拉丁）+ Noto Serif SC（中文），加载失败自动回退系统衬线 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Michroma&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
-  <!-- 在页面渲染前先确定深色/浅色模式，避免打开时颜色闪烁 -->
-  <script>
-    (function () {
-      try {
-        var saved = localStorage.getItem("theme");
-        var theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-        document.documentElement.dataset.theme = theme;
-      } catch (e) {
-        document.documentElement.dataset.theme = "light";
-      }
-    })();
-  </script>
-
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="landing.css">
 </head>
 <body>
+  <section class="stage">
 
-  <!-- ======================= 导航栏 ======================= -->
-  <nav id="navbar">
-    <div class="container nav-inner">
-      <a href="#hero" class="logo mono" id="nav-logo"></a>
-      <!-- 桌面端菜单（内容由 main.js 从 config.js 渲染） -->
-      <ul class="nav-links" id="nav-links"></ul>
-      <div class="nav-actions">
-        <button id="theme-toggle" class="icon-btn" aria-label="切换深色/浅色模式">
-          <!-- 太阳/月亮图标由 CSS 根据当前主题切换显示 -->
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        </button>
-        <button id="menu-toggle" class="icon-btn menu-btn" aria-label="打开菜单" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
+    <!-- 背景层：渐变兜底 + 四段氛围视频（切换由下方脚本驱动） -->
+    <div class="bg-videos" aria-hidden="true">
+      <div class="bg-fallback"></div>
+      <video class="bg-video is-active" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260702_081127_0992a171-d3c6-4978-8213-0ec5df8b6d63.mp4" autoplay muted loop playsinline preload="auto"></video>
+      <video class="bg-video" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260702_092026_dd05b805-ea0f-40b2-8c52-332b88502592.mp4" muted loop playsinline preload="auto"></video>
+      <video class="bg-video" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260702_081042_df7202bf-bd80-4b2b-bbc6-1f09ba2870e9.mp4" muted loop playsinline preload="auto"></video>
+      <video class="bg-video" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260702_080959_4cac5234-3573-464e-a5b7-76b94b8a7d61.mp4" muted loop playsinline preload="auto"></video>
     </div>
-    <!-- 手机端下拉菜单 -->
-    <div class="mobile-menu" id="mobile-menu"></div>
-  </nav>
 
-  <!-- ======================= 首屏 Hero ======================= -->
-  <header id="hero" class="hero">
-    <div class="hero-blob blob-a" aria-hidden="true"></div>
-    <div class="hero-blob blob-b" aria-hidden="true"></div>
-    <canvas id="particles" aria-hidden="true"></canvas>
-    <div class="container hero-content">
-      <div class="avatar" id="avatar"></div>
-      <p class="hero-greeting mono"></p>
-      <h1 class="hero-name"></h1>
-      <p class="hero-role"></p>
-      <p class="hero-slogan"></p>
-      <p class="hero-desc"></p>
-      <div class="hero-tags mono" id="hero-tags"></div>
-      <div class="hero-btns" id="hero-btns"></div>
-    </div>
-    <a class="scroll-down mono" href="#about" aria-label="向下滚动">SCROLL ↓</a>
-  </header>
+    <!-- 车窗贴图：透明 PNG 覆盖层，带着轻微的浮动呼吸感 -->
+    <img class="train-overlay train-bob" src="assets/train-overlay.png" alt="" draggable="false">
 
-  <!-- 跑马灯滚筒：滚动进度驱动它转动（内容由 config.js 生成） -->
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee-track" id="marquee-track"></div>
-  </div>
+    <!-- 内容层 -->
+    <div class="content" id="content">
 
-  <main>
-    <!-- ======================= 关于我 ======================= -->
-    <section id="about" class="section">
-      <div class="container">
-        <div class="section-head reveal"></div>
-        <div class="about-grid">
-          <div class="about-text reveal" id="about-text"></div>
-          <ul class="about-highlights reveal" id="about-highlights"></ul>
+      <!-- 顶部导航 -->
+      <nav class="nav">
+        <span class="logo">苦瓜大王</span>
+        <div class="nav-pill liquid-glass">
+          <a class="nav-link" href="./intro/#projects">项目</a>
+          <a class="nav-link" href="./intro/#timeline">经历</a>
+          <a class="nav-link" href="./intro/#honors">荣誉</a>
+          <a class="nav-link" href="./intro/#contact">联系我</a>
+          <a class="nav-cta" href="./intro/">进入自我介绍 →</a>
+        </div>
+      </nav>
+
+      <!-- 主视觉文案 -->
+      <div class="hero">
+        <div class="badge liquid-glass swap-color">信息安全 × AI Agent × 3D 交互</div>
+
+        <h1 class="title swap-color">
+          于喧嚣的赛博宇宙中<br>搭建自己的澄澈角落
+        </h1>
+
+        <p class="desc swap-color">
+          这里是苦瓜大王的数字基地：一个喜欢把奇思妙想变成工具的信息安全专业学生。
+          准备好了就推开车门，进来看看。
+        </p>
+
+        <div class="cta-row">
+          <a class="cta-primary" href="./intro/">✦ 进入我的自我介绍</a>
+          <a class="cta-ghost liquid-glass" href="./intro/#projects">先逛逛作品</a>
+        </div>
+
+        <!-- 场景切换：像列车驶过不同的风景 -->
+        <div class="scene-tabs">
+          <button class="scene-btn is-active" data-index="0" type="button">黄金时刻</button>
+          <button class="scene-btn" data-index="1" type="button">静谧水面</button>
+          <button class="scene-btn" data-index="2" type="button">幽深森林</button>
+          <button class="scene-btn" data-index="3" type="button">宁静黎明</button>
         </div>
       </div>
-    </section>
 
-    <!-- ======================= 技能 ======================= -->
-    <section id="skills" class="section section-alt">
-      <div class="container">
-        <div class="section-head reveal"></div>
-        <ul class="skills-grid" id="skills-list"></ul>
+      <!-- 底部数据行 -->
+      <div class="stats swap-color">
+        <span>1 件参赛作品</span>
+        <span class="stat-divider">|</span>
+        <span>4700+ 行代码</span>
+        <span class="stat-divider">|</span>
+        <span>4 大古建场景</span>
+        <span class="stat-divider">|</span>
+        <span>∞ 好奇心</span>
       </div>
-    </section>
-
-    <!-- ======================= 项目 / 作品 ======================= -->
-    <section id="projects" class="section">
-      <div class="container">
-        <div class="section-head reveal"></div>
-        <div class="projects-grid" id="projects-list"></div>
-      </div>
-    </section>
-
-    <!-- ======================= 经历时间线 ======================= -->
-    <section id="timeline" class="section section-alt">
-      <div class="container">
-        <div class="section-head reveal"></div>
-        <ul class="timeline" id="timeline-list"></ul>
-      </div>
-    </section>
-
-    <!-- ======================= 荣誉证书墙 ======================= -->
-    <section id="honors" class="section section-alt">
-      <div class="container">
-        <div class="section-head reveal"></div>
-        <div class="honors-grid" id="honors-list"></div>
-      </div>
-    </section>
-
-    <!-- ======================= 联系我 ======================= -->
-    <section id="contact" class="section">
-      <div class="container">
-        <div class="section-head reveal"></div>
-        <div class="contact-grid" id="contact-list"></div>
-      </div>
-    </section>
-  </main>
-
-  <!-- ======================= 页脚 ======================= -->
-  <footer class="footer">
-    <div class="container">
-      <p id="footer-text"></p>
     </div>
-  </footer>
+  </section>
 
-  <!-- 常驻操作条：滚过首屏后升起，核心按钮永远一键可达（内容由 config.js 生成） -->
-  <div id="cta-bar" class="cta-bar"></div>
+  <script>
+    // 场景切换：切视频 + "幽深森林"场景文字变深色（保持可读）
+    const videos = [...document.querySelectorAll(".bg-video")];
+    const content = document.getElementById("content");
+    let active = 0;
+    let cooldown = false;
 
-  <!-- 返回顶部按钮 -->
-  <button id="back-to-top" aria-label="返回顶部">↑</button>
+    function switchScene(index) {
+      if (index === active || cooldown) return;
+      active = index;
+      cooldown = true;
+      setTimeout(() => (cooldown = false), 1000); // 防连点，给淡入淡出留时间
+      videos.forEach((video, i) => {
+        video.classList.toggle("is-active", i === index);
+        if (i === index) video.play().catch(() => {}); // 自动播放被拦时兜底
+        else video.pause();
+      });
+      content.classList.toggle("is-dark", index === 2);
+    }
 
-  <!-- 证书放大预览（灯箱）：点击带图证书卡片时打开 -->
-  <div id="lightbox" class="lightbox" aria-hidden="true">
-    <figure class="lightbox-body">
-      <img id="lightbox-img" src="" alt="">
-      <figcaption id="lightbox-caption" class="mono"></figcaption>
-    </figure>
-    <button id="lightbox-close" aria-label="关闭预览">×</button>
-  </div>
-
-  <!-- 先加载内容配置，再加载渲染脚本（顺序不能反） -->
-  <script src="js/config.js"></script>
-  <script src="js/main.js"></script>
+    document.querySelectorAll(".scene-btn").forEach((btn) => {
+      btn.addEventListener("click", () => switchScene(Number(btn.dataset.index)));
+    });
+  </script>
 </body>
 </html>

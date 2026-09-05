@@ -1,0 +1,280 @@
+/* ======================================================================
+   入口页样式（Lumora 风格）
+   结构：全屏氛围视频背景 + 车窗贴图 + 衬线排版内容层
+   配色：默认白字；切到"幽深森林"场景时整组文字变深色
+   ====================================================================== */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  background: #000;
+  font-family: "Instrument Serif", "Noto Serif SC", "Source Han Serif SC", "Songti SC", "SimSun", serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: #000;
+}
+
+/* ---------- 背景层 ---------- */
+.bg-videos { position: absolute; inset: 0; z-index: 0; }
+
+/* 视频加载失败时的黄昏渐变兜底 */
+.bg-fallback {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    #2b3a55 0%, #7a5578 38%, #d98a6e 62%, #b56a8a 80%, #3a2b45 100%);
+}
+.bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+.bg-video.is-active { opacity: 1; }
+
+/* ---------- 车窗贴图：轻微浮动呼吸感 ---------- */
+.train-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
+.train-bob { animation: train-bob 3s ease-in-out infinite; will-change: transform; }
+@keyframes train-bob {
+  0%, 100% { transform: translateY(0) scale(1.03); }
+  50%      { transform: translateY(-6px) scale(1.03); }
+}
+
+/* ---------- Liquid Glass（毛玻璃胶囊）---------- */
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.01);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: none;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+.liquid-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.15) 20%,
+    rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.15) 80%, rgba(255, 255, 255, 0.45) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ---------- 内容层 ---------- */
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: #fff;
+}
+
+/* 顶部导航 */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 0;
+}
+.logo {
+  font-size: 1.5rem;
+  font-style: italic;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+}
+.nav-pill {
+  display: flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 6px 8px 6px 10px;
+  font-family: system-ui, sans-serif;
+}
+.nav-link {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.nav-link:hover { color: #fff; }
+.nav-cta {
+  margin-left: 4px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: #fff;
+  color: #111;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: transform 0.3s;
+}
+.nav-cta:hover { transform: scale(1.04); }
+
+/* 主视觉文案 */
+.hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 0 20px;
+  text-align: center;
+}
+.badge {
+  border-radius: 999px;
+  padding: 7px 18px;
+  font-family: system-ui, sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+}
+.title {
+  font-size: clamp(2.2rem, 6.2vw, 4.6rem);
+  font-weight: 500;
+  line-height: 1.18;
+  letter-spacing: 2px;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
+}
+.desc {
+  max-width: 560px;
+  font-family: system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.8;
+  opacity: 0.94;
+}
+
+/* CTA 按钮排 */
+.cta-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-family: system-ui, sans-serif;
+}
+.cta-primary {
+  padding: 14px 34px;
+  border-radius: 999px;
+  background: #fff;
+  color: #111;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.35);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.cta-primary:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 16px 44px rgba(0, 0, 0, 0.45); }
+.cta-ghost {
+  padding: 13px 28px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background 0.3s, transform 0.3s;
+}
+.cta-ghost:hover { background: rgba(255, 255, 255, 0.12); transform: translateY(-2px); }
+
+/* 场景切换标签 */
+.scene-tabs {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-top: 8px;
+  font-family: system-ui, sans-serif;
+}
+.scene-btn {
+  background: none;
+  border: none;
+  border-bottom: 1px solid transparent;
+  padding: 0 0 5px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: inherit;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.scene-btn:hover { opacity: 0.85; }
+.scene-btn.is-active { border-bottom-color: currentColor; opacity: 1; }
+
+/* 底部数据行 */
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 16px;
+  padding: 0 20px 26px;
+  font-family: system-ui, sans-serif;
+  font-size: 0.86rem;
+}
+.stats span { opacity: 0.85; }
+.stat-divider { opacity: 0.35; user-select: none; }
+
+/* "幽深森林"场景：整组文字切换为深色 */
+.content.is-dark .swap-color { color: #182C41; text-shadow: none; }
+.content.is-dark .badge.liquid-glass::before { opacity: 0.7; }
+.content.is-dark .nav-link { color: rgba(24, 44, 65, 0.85); }
+.content.is-dark .nav-link:hover { color: #182C41; }
+.content.is-dark .logo { color: #182C41; text-shadow: none; }
+.content.is-dark .desc { opacity: 0.9; }
+
+/* ---------- 入场动画 ---------- */
+.badge, .title, .desc, .cta-row, .scene-tabs, .stats, .nav {
+  animation: fade-up 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.title   { animation-delay: 0.12s; }
+.desc    { animation-delay: 0.24s; }
+.cta-row { animation-delay: 0.36s; }
+.scene-tabs { animation-delay: 0.48s; }
+.stats   { animation-delay: 0.6s; }
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(26px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---------- 移动端 ---------- */
+@media (max-width: 760px) {
+  .nav { padding: 16px 18px 0; }
+  .nav-pill .nav-link { display: none; } /* 手机上只留 logo + 进入按钮 */
+  .nav-cta { margin-left: 0; }
+  .hero { gap: 18px; }
+  .scene-tabs { gap: 18px; }
+  .cta-primary { padding: 13px 26px; font-size: 0.95rem; }
+}
+
+/* 尊重系统"减少动态效果"设置 */
+@media (prefers-reduced-motion: reduce) {
+  .train-bob { animation: none; }
+  .badge, .title, .desc, .cta-row, .scene-tabs, .stats, .nav { animation: none; }
+}
