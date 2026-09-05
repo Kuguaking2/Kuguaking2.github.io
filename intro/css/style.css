@@ -262,10 +262,28 @@ img { max-width: 100%; display: block; }
 
 .hero-greeting { font-family: var(--display); color: var(--primary); font-size: 0.92rem; margin-bottom: 10px; letter-spacing: 2px; }
 .hero-name {
+  /* 流动彩虹渐变字（效果来自 flowing-rainbow-demo.html）：
+     站酷庆科黄油体 + 渐变裁切进文字 + 8 秒循环流动 */
+  font-family: "ZCOOL QingKe HuangYou", var(--sans);
   font-size: clamp(3rem, 10vw, 6.8rem); /* 首屏围绕大字构建 */
-  font-weight: 900;
+  font-weight: 400; /* 黄油体本身粗壮，无需加粗 */
   letter-spacing: 4px;
   line-height: 1.05;
+  background: linear-gradient(90deg, #ff5f6d, #ffc371, #f9f871, #47e5bc, #5da9ff, #b06ab3, #ff5f6d);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-move 8s ease infinite;
+}
+@keyframes gradient-move {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+/* 老浏览器不支持文字渐变裁切时，退回纯白大字 */
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .hero-name { color: #fff; background: none; animation: none; }
 }
 .hero-role { font-size: clamp(1.05rem, 2.6vw, 1.35rem); color: var(--muted); margin-top: 8px; font-weight: 500; }
 .hero-slogan { margin-top: 18px; font-size: clamp(1.05rem, 2.4vw, 1.25rem); }
@@ -814,4 +832,5 @@ img { max-width: 100%; display: block; }
   .hero-content { animation: none; opacity: 1; transform: none; filter: none; }
   .hero-blob { animation: none; }
   .marquee-track { transform: rotateX(14deg); } /* 不再随滚动转动 */
+  .hero-name { animation: none; background-position: 50% 50%; }
 }
