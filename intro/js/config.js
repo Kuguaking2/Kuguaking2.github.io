@@ -70,19 +70,25 @@ window.SITE_CONFIG = {
     ],
   },
 
-  /* ---------- 技能（level 是 0~100 的数字，控制进度条长度）---------- */
+  /* ---------- 技能（能力雷达 + 分类卡片）----------
+     radar: 雷达图维度，level 是 0~100
+     groups: 分类技能卡，想加分类就再复制一组 */
   skills: {
     title: "技能",
-    subtitle: "一直在学习的路上",
-    items: [
-      { name: "Python",                 level: 85 },
-      { name: "网络安全 / 渗透测试基础", level: 75 },
-      { name: "Linux 基础",             level: 75 },
-      { name: "AI Agent 应用开发",      level: 72 },
-      { name: "Vue3 / Three.js 3D 开发", level: 70 },
-      { name: "JavaScript / 前端基础",  level: 65 },
-      { name: "CTF（Web 方向）",        level: 60 },
-      { name: "英语读写",               level: 70 },
+    subtitle: "能力雷达 · 每个方向都在持续加点",
+    radar: [
+      { name: "Python",   level: 85 },
+      { name: "安全攻防", level: 75 },
+      { name: "Linux",    level: 75 },
+      { name: "AI Agent", level: 72 },
+      { name: "前端 3D",  level: 70 },
+      { name: "CTF",      level: 60 },
+    ],
+    groups: [
+      { icon: "⌨️", name: "开发语言", skills: ["Python", "JavaScript", "HTML · CSS"] },
+      { icon: "🛡️", name: "安全攻防", skills: ["渗透测试基础", "CTF（Web 方向）", "Linux"] },
+      { icon: "🤖", name: "AI 工程",  skills: ["AI Agent 应用开发", "LLM API 集成", "提示词工程"] },
+      { icon: "🎨", name: "前端与 3D", skills: ["Vue3", "Three.js", "Element Plus"] },
     ],
   },
 

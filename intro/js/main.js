@@ -88,22 +88,68 @@ function renderAbout() {
     .join("");
 }
 
-/* ---------------- 渲染：技能（进度条在滚动到可视区域时才开始填充）---------------- */
+/* ---------------- 渲染：技能（能力雷达图 + 分类卡片便当盒）---------------- */
 function renderSkills() {
   renderHead("#skills .section-head", CONFIG.skills.title, CONFIG.skills.subtitle);
-  $("#skills-list").innerHTML = CONFIG.skills.items
-    .map((s, i) => {
-      const level = Math.max(0, Math.min(100, Number(s.level) || 0));
-      return `
-      <li class="skill reveal" style="--d:${(i * 0.07).toFixed(2)}s">
-        <div class="skill-head">
-          <span class="skill-name">${esc(s.name)}</span>
-          <span class="skill-num mono">${level}%</span>
-        </div>
-        <div class="skill-bar"><div class="skill-fill" style="--level:${level}%"></div></div>
-      </li>`;
+
+  // --- 能力雷达图（SVG 由 config 数据生成）---
+  const dims = CONFIG.skills.radar || [];
+  const cx = 170, cy = 152, R = 112, N = Math.max(3, dims.length);
+  const pt = (i, ratio) => {
+    const angle = (Math.PI * 2 * i) / N - Math.PI / 2; // 从正上方开始顺时针
+    return [cx + Math.cos(angle) * R * ratio, cy + Math.sin(angle) * R * ratio];
+  };
+  const ring = (ratio) =>
+    dims.map((_, i) => pt(i, ratio).map((v) => v.toFixed(1)).join(",")).join(" ");
+  const rings = [0.33, 0.66, 1]
+    .map((ratio) => `<polygon class="radar-ring" points="${ring(ratio)}"></polygon>`)
+    .join("");
+  const axes = dims
+    .map((_, i) => {
+      const [x, y] = pt(i, 1);
+      return `<line class="radar-axis" x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}"></line>`;
     })
     .join("");
+  const level = (d) => Math.max(0, Math.min(100, Number(d.level) || 0)) / 100;
+  const polyPoints = dims.map((d, i) => pt(i, level(d)).map((v) => v.toFixed(1)).join(",")).join(" ");
+  const dots = dims
+    .map((d, i) => {
+      const [x, y] = pt(i, level(d));
+      return `<circle class="radar-dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4"><title>${esc(d.name)} ${Math.round(level(d) * 100)}%</title></circle>`;
+    })
+    .join("");
+  const labels = dims
+    .map((d, i) => {
+      const [x, y] = pt(i, 1.26);
+      const anchor = Math.abs(x - cx) < 12 ? "middle" : x > cx ? "start" : "end";
+      return `<text class="radar-label" x="${x.toFixed(1)}" y="${(y + 4).toFixed(1)}" text-anchor="${anchor}">${esc(d.name)}</text>`;
+    })
+    .join("");
+
+  const radarHtml = `
+    <article class="skill-card radar-card reveal">
+      <p class="skill-card-title mono">SKILL RADAR · 能力雷达</p>
+      <svg class="radar-svg" viewBox="0 0 340 300" role="img" aria-label="能力雷达图">
+        ${rings}${axes}
+        <polygon class="radar-poly" points="${polyPoints}"></polygon>
+        ${dots}${labels}
+      </svg>
+    </article>`;
+
+  // --- 分类技能卡 ---
+  const groupHtml = (CONFIG.skills.groups || [])
+    .map((g, i) => {
+      const chips = (g.skills || []).map((s) => `<li class="tag">${esc(s)}</li>`).join("");
+      return `
+      <article class="skill-card group-card reveal" style="--d:${(i * 0.08).toFixed(2)}s">
+        <p class="group-icon">${esc(g.icon || "✦")}</p>
+        <h3 class="group-name">${esc(g.name)}</h3>
+        <ul class="skill-chips">${chips}</ul>
+      </article>`;
+    })
+    .join("");
+
+  $("#skills-list").innerHTML = radarHtml + groupHtml;
 }
 
 /* ---------------- 渲染：项目 / 作品 ---------------- */
