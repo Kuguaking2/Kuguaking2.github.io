@@ -434,7 +434,7 @@ function setupParticles() {
     ctx.clearRect(0, 0, w, h);
     // 粒子颜色跟随主题（CSS 变量 --particle）
     const color =
-      getComputedStyle(document.documentElement).getPropertyValue("--particle").trim() || "#FF005E";
+      getComputedStyle(document.documentElement).getPropertyValue("--particle").trim() || "#60A5FA";
 
     // 更新位置，碰到边缘就反弹
     for (const p of points) {
