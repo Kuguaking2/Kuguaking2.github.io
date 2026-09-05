@@ -181,8 +181,8 @@ window.SITE_CONFIG = {
     // icon 可选：email / github / chat / link
     items: [
       { icon: "email",  label: "邮箱",   value: "your-email@example.com", link: "mailto:your-email@example.com" },
-      { icon: "github", label: "GitHub", value: "@yourname",              link: "https://github.com/yourname" },
-      { icon: "chat",   label: "微信",   value: "your-wechat-id",         link: "" },
+      { icon: "github", label: "GitHub", value: "@Kuguaking2",         link: "https://github.com/Kuguaking2" },
+      { icon: "chat",   label: "微信",   value: "18279687950",         link: "" },
     ],
   },
 
