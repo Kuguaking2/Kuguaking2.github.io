@@ -22,10 +22,11 @@
   --primary-dark: #D6004F;
   --primary-light: #FF5C9D;
 
-  /* 浅色模式配色（粉调浅底） */
-  --bg: #FFF4F8;
-  --bg-soft: #FFE9F1;
-  --surface: #FFFFFF;
+  /* 浅色模式配色（粉调半透明底，让地层背景透出来） */
+  --bg: rgba(255, 244, 248, 0.66);
+  --bg-soft: rgba(255, 233, 241, 0.6);
+  --surface: rgba(255, 255, 255, 0.86);
+  --bg-veil: rgba(255, 244, 248, 0.88);
   --text: #1A0B12;
   --text-soft: #4A3540;
   --muted: #8A6B7A;
@@ -41,11 +42,12 @@
   --display: "Michroma", var(--sans);
 }
 
-/* 深色模式配色（Inner Circle 原生暗夜粉） */
+/* 深色模式配色（Inner Circle 原生暗夜粉，半透明底 + 地形背景） */
 [data-theme="dark"] {
-  --bg: #11010A;
-  --bg-soft: #1C0611;
-  --surface: #22091A;
+  --bg: rgba(17, 1, 10, 0.62);
+  --bg-soft: rgba(28, 6, 17, 0.6);
+  --surface: rgba(34, 9, 26, 0.82);
+  --bg-veil: rgba(13, 3, 9, 0.52);
   --text: #FDEFF5;
   --text-soft: #E8C7D6;
   --muted: #B08A9C;
@@ -62,7 +64,10 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 84px; /* 锚点跳转时留出固定导航栏的高度 */
+  /* 兜底底色：背景图加载失败时也能正常显示 */
+  background: #efe4ea;
 }
+html[data-theme="dark"] { background: #0d0512; }
 
 body {
   font-family: var(--sans);
@@ -80,6 +85,29 @@ img { max-width: 100%; display: block; }
 .container { width: min(1080px, 92%); margin: 0 auto; }
 
 ::selection { background: rgba(255, 0, 94, 0.28); }
+
+/* ========== 02.5 全站固定背景：地层熔岩地形 + 鼠标探照灯 ========== */
+.site-bg { position: fixed; inset: 0; z-index: -1; }
+.site-bg-base,
+.site-bg-reveal,
+.site-bg-veil {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.site-bg-base { background-image: url("../images/terrain-base.jpg"); }
+/* 揭示层：默认藏在鼠标探照灯之外，移到哪里就"挖开"哪里 */
+.site-bg-reveal {
+  background-image: url("../images/terrain-reveal.jpg");
+  -webkit-mask-image: radial-gradient(circle 300px at var(--mx, -999px) var(--my, -999px),
+    #000 0%, #000 38%, rgba(0, 0, 0, 0.75) 58%, rgba(0, 0, 0, 0.35) 76%, transparent 96%);
+  mask-image: radial-gradient(circle 300px at var(--mx, -999px) var(--my, -999px),
+    #000 0%, #000 38%, rgba(0, 0, 0, 0.75) 58%, rgba(0, 0, 0, 0.35) 76%, transparent 96%);
+}
+/* 柔光纱：保证文字在任何主题下都可读 */
+.site-bg-veil { background: var(--bg-veil); }
 
 /* ========== 03. 导航栏 ========== */
 #navbar {

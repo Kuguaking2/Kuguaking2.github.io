@@ -347,6 +347,36 @@ function setupScrollEffects() {
   topBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 }
 
+/* ---------------- 交互：鼠标探照灯（揭示第二层地层背景）----------------
+   复刻 lithos 的"挖矿"效果：光斑用缓动跟随鼠标，柔和不生硬。
+   触屏设备没有鼠标悬停，自动跳过（保持底层地形图不变）。 */
+function setupSpotlight() {
+  const reveal = document.querySelector(".site-bg-reveal");
+  if (!reveal || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+  let targetX = window.innerWidth / 2;
+  let targetY = window.innerHeight / 2;
+  let curX = targetX;
+  let curY = targetY;
+
+  window.addEventListener(
+    "mousemove",
+    (e) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+    },
+    { passive: true }
+  );
+
+  (function loop() {
+    curX += (targetX - curX) * 0.1;
+    curY += (targetY - curY) * 0.1;
+    reveal.style.setProperty("--mx", curX.toFixed(1) + "px");
+    reveal.style.setProperty("--my", curY.toFixed(1) + "px");
+    requestAnimationFrame(loop);
+  })();
+}
+
 /* ---------------- 交互：滚动淡入动画 ---------------- */
 function setupReveal() {
   const els = $$(".reveal");
@@ -468,6 +498,7 @@ function init() {
   setupTheme();
   setupMobileMenu();
   setupLightbox();
+  setupSpotlight();
   setupScrollEffects();
   setupReveal();
   setupParticles();
