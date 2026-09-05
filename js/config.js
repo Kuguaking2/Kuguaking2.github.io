@@ -180,7 +180,7 @@ window.SITE_CONFIG = {
     subtitle: "无论是交流技术、组队打比赛还是随便聊聊，都欢迎找我！",
     // icon 可选：email / github / chat / link
     items: [
-      { icon: "email",  label: "邮箱",   value: "your-email@example.com", link: "mailto:your-email@example.com" },
+      { icon: "email",  label: "邮箱",   value: "2672721507@qq.com",     link: "mailto:2672721507@qq.com" },
       { icon: "github", label: "GitHub", value: "@Kuguaking2",         link: "https://github.com/Kuguaking2" },
       { icon: "chat",   label: "微信",   value: "18279687950",         link: "" },
     ],
