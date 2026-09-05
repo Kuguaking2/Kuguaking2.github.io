@@ -125,7 +125,7 @@ window.SITE_CONFIG = {
     items: [
       {
         time: "2023.09 - 至今",
-        title: "XX 大学 · 信息安全专业（本科在读）", // ⚠️ 记得把"XX 大学"换成你的学校
+        title: "江西警察学院 · 信息安全专业（本科在读）",
         description: "系统学习计算机网络、操作系统、密码学、Web 安全等课程，喜欢把课上知识动手做成项目。",
       },
       {
@@ -152,7 +152,7 @@ window.SITE_CONFIG = {
       },
       {
         title: "校级奖学金（示例）",
-        issuer: "XX 大学",
+        issuer: "江西警察学院",
         time: "2025.12",
         emoji: "🎖️",
         image: "",
