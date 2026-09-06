@@ -88,8 +88,9 @@
   </section>
 
   <script>
-    // 场景切换：切视频 + "幽深森林"场景文字变深色（保持可读）
+    // 场景切换：切视频 + 同步按钮下划线 + "幽深森林"场景文字变深色（保持可读）
     const videos = [...document.querySelectorAll(".bg-video")];
+    const sceneBtns = [...document.querySelectorAll(".scene-btn")];
     const content = document.getElementById("content");
     let active = 0;
     let cooldown = false;
@@ -104,10 +105,12 @@
         if (i === index) video.play().catch(() => {}); // 自动播放被拦时兜底
         else video.pause();
       });
+      // 下划线标记跟着切到当前选中的场景按钮上
+      sceneBtns.forEach((btn, i) => btn.classList.toggle("is-active", i === index));
       content.classList.toggle("is-dark", index === 2);
     }
 
-    document.querySelectorAll(".scene-btn").forEach((btn) => {
+    sceneBtns.forEach((btn) => {
       btn.addEventListener("click", () => switchScene(Number(btn.dataset.index)));
     });
   </script>
