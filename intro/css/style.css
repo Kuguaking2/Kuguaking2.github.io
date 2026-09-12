@@ -899,15 +899,3 @@ img { max-width: 100%; display: block; }
 
 /* 水墨转场层：点击跨页链接（返回入口页）时铺满全屏 */
 
-
-/* 水墨转场层：点击跨页链接时铺满全屏 */
-.ink-transition {
-  position: fixed;
-  inset: 0;
-  z-index: 400;
-  pointer-events: none;
-  display: none;
-}
-.ink-transition.play { display: block; }
-.ink-transition svg { width: 100%; height: 100%; display: block; }
-.ink-layer { transform-box: view-box; transform-origin: 0 0; will-change: transform, opacity; }

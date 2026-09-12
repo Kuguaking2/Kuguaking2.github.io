@@ -39,11 +39,11 @@
       <nav class="nav">
         <span class="logo">苦瓜大王</span>
         <div class="nav-pill liquid-glass">
-          <a class="nav-link" href="./intro/#projects" data-ink-nav>项目</a>
-          <a class="nav-link" href="./intro/#timeline" data-ink-nav>经历</a>
-          <a class="nav-link" href="./intro/#honors" data-ink-nav>荣誉</a>
-          <a class="nav-link" href="./intro/#contact" data-ink-nav>联系我</a>
-          <a class="nav-cta" href="./intro/" data-ink-nav>进入自我介绍 →</a>
+          <a class="nav-link" href="./intro/#projects">项目</a>
+          <a class="nav-link" href="./intro/#timeline">经历</a>
+          <a class="nav-link" href="./intro/#honors">荣誉</a>
+          <a class="nav-link" href="./intro/#contact">联系我</a>
+          <a class="nav-cta" href="./intro/">进入自我介绍 →</a>
         </div>
       </nav>
 
@@ -61,8 +61,8 @@
         </p>
 
         <div class="cta-row">
-          <a class="cta-primary" href="./intro/" data-ink-nav>✦ 进入我的自我介绍</a>
-          <a class="cta-ghost liquid-glass" href="./intro/#projects" data-ink-nav>先逛逛作品</a>
+          <a class="cta-primary" href="./intro/">✦ 进入我的自我介绍</a>
+          <a class="cta-ghost liquid-glass" href="./intro/#projects">先逛逛作品</a>
         </div>
 
         <!-- 场景切换：像列车驶过不同的风景 -->
@@ -115,112 +115,5 @@
     });
   </script>
 
-  <!-- 水墨转场层：点击跨页链接时，宣纸白与浓墨从点击处错峰晕开铺满全屏，跳转后在新页面淡出揭开 -->
-  <div class="ink-transition" aria-hidden="true">
-    <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
-      <defs>
-        <filter id="ink-bleed" x="-40%" y="-40%" width="180%" height="180%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="4" seed="7" result="noise"/>
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="120"/>
-        </filter>
-        <filter id="ink-bleed-2" x="-40%" y="-40%" width="180%" height="180%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.034" numOctaves="4" seed="31" result="noise"/>
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="120"/>
-        </filter>
-        <filter id="ink-bleed-3" x="-40%" y="-40%" width="180%" height="180%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.028" numOctaves="4" seed="53" result="noise"/>
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="120"/>
-        </filter>
-      </defs>
-      <g id="ink-white" class="ink-layer" opacity="0" filter="url(#ink-bleed)">
-        <circle cx="0" cy="0" r="1000" fill="#f4f1e8"/>
-      </g>
-      <g id="ink-black" class="ink-layer" opacity="0" filter="url(#ink-bleed-2)">
-        <circle cx="0" cy="0" r="950" fill="#0b0e16"/>
-        <circle cx="0" cy="0" r="870" fill="#05070e"/>
-      </g>
-      <g id="ink-core" class="ink-layer" opacity="0" filter="url(#ink-bleed-3)">
-        <circle cx="0" cy="0" r="780" fill="#03050a"/>
-      </g>
-    </svg>
-  </div>
-  <script>
-    /* ===== 水墨转场：三层（宣纸白/浓墨/焦墨芯）错峰向外围洇开 =====
-       性能要点：各层按最终尺寸绘制一次（滤镜只算一次），
-       扩散用 CSS transition + transform 缩放（GPU 合成，不重算滤镜） */
-    (function () {
-      const layer = document.querySelector(".ink-transition");
-      if (!layer) return;
-      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const BASE_R = 1000;
-      const layers = [
-        { g: document.getElementById("ink-white"), mul: 1.26, delay: 0,   dur: 1300 },
-        { g: document.getElementById("ink-black"), mul: 1.0,  delay: 140, dur: 1300 },
-        { g: document.getElementById("ink-core"),  mul: 0.84, delay: 280, dur: 1300 },
-      ];
-
-      function toViewBox(x, y) {
-        const scale = Math.max(1920 / window.innerWidth, 1080 / window.innerHeight);
-        return [
-          x * scale + (1920 - window.innerWidth * scale) / 2,
-          y * scale + (1080 - window.innerHeight * scale) / 2,
-        ];
-      }
-
-      function place(l, x, y, scale) {
-        l.g.style.transform = "translate(" + x.toFixed(1) + "px, " + y.toFixed(1) + "px) scale(" + scale.toFixed(3) + ")";
-      }
-
-      function spread(x, y, done) {
-        layer.classList.add("play");
-        layers.forEach((l) => {
-          l.g.setAttribute("opacity", "1");
-          l.g.style.transition = "none";
-          place(l, x, y, 0.02);
-        });
-        void layer.getBoundingClientRect(); // 强制回流，确保初始状态先生效
-        layers.forEach((l) => {
-          l.g.style.transition = "transform " + l.dur + "ms cubic-bezier(0.25, 0.7, 0.3, 1) " + l.delay + "ms";
-          place(l, x, y, l.mul);
-        });
-        setTimeout(done, 1780); // 等最慢的焦墨芯洇完再跳转
-      }
-
-      // 到达新页面：若刚经历水墨转场（3 秒内），整幅水墨淡出揭开新页面
-      try {
-        const stamp = Number(sessionStorage.getItem("ink-nav") || 0);
-        if (stamp && Date.now() - stamp < 3000) {
-          sessionStorage.removeItem("ink-nav");
-          if (reduceMotion) return;
-          layer.classList.add("play");
-          layers.forEach((l) => {
-            l.g.style.transition = "none";
-            l.g.setAttribute("opacity", "1");
-            place(l, 960, 540, (Math.hypot(960, 540) + 320) / BASE_R);
-          });
-          void layer.getBoundingClientRect();
-          layers.forEach((l) => {
-            l.g.style.transition = "opacity 0.9s ease " + (l.delay || 0) + "ms";
-            l.g.setAttribute("opacity", "0");
-          });
-          setTimeout(() => {
-            layer.classList.remove("play");
-            layers.forEach((l) => (l.g.style.transition = ""));
-          }, 2000);
-        }
-      } catch (e) { /* 忽略隐私模式下的存储错误 */ }
-
-      document.querySelectorAll("[data-ink-nav]").forEach((link) => {
-        link.addEventListener("click", (e) => {
-          if (reduceMotion) return; // 减少动效：直接跳转
-          e.preventDefault();
-          const rect = link.getBoundingClientRect();
-          try { sessionStorage.setItem("ink-nav", String(Date.now())); } catch (err) {}
-          const [vx, vy] = toViewBox(rect.left + rect.width / 2, rect.top + rect.height / 2);
-          spread(vx, vy, () => { location.href = link.getAttribute("href"); });
-        });
-      });
-    })();
-  </script>
 </body>
 </html>
